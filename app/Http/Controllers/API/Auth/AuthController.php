@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\API\Auth;
 
 use App\Models\User;
+use App\Models\Donor;
+use App\Models\Client;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -37,12 +39,34 @@ class AuthController extends Controller
 
     public function register(Request $request)
     {
-        $user = User::create([
-            'name' => $request->name, 
-            'email' => $request->email, 
-            'password' => Hash::make($request->password), 
-            'api_token' => Str::random(60),
-        ]);
+        if($request->is_client == 1)
+        {   
+            $user = User::create([
+                'name' => $request->name, 
+                'email' => $request->email, 
+                'password' => Hash::make($request->password), 
+                'api_token' => Str::random(60),
+                'is_client' => $request->is_client,
+            ]);
+
+            $client = Client::create([
+                'user_id' => $user->id
+            ]);
+        }
+        else
+        {
+            $user = User::create([
+                'name' => $request->name, 
+                'email' => $request->email, 
+                'password' => Hash::make($request->password), 
+                'api_token' => Str::random(60),
+                'is_donor' => $request->is_donor,
+            ]);
+
+            $donor = Donor::create([
+                'user_id' => $user->id
+            ]);
+        }
 
         $token = $user->createToken('api_token')->accessToken;
 
