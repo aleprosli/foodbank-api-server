@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use App\Http\Requests\RegisterUserRequest;
 
 class AuthController extends Controller
 {
@@ -37,14 +38,15 @@ class AuthController extends Controller
         }
     }
 
-    public function register(Request $request)
+    public function register(RegisterUserRequest $request)
     {
         if($request->is_client == 1)
         {   
             $user = User::create([
                 'name' => $request->name, 
                 'email' => $request->email, 
-                'password' => Hash::make($request->password), 
+                'password' => Hash::make($request->password),
+                'password_confirmation' => Hash::make($request->password), 
                 'api_token' => Str::random(60),
                 'is_client' => $request->is_client,
             ]);
