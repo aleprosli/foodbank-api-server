@@ -22,4 +22,14 @@ class Crowdfund extends Model
     {
         return $this->hasOne(User::class);
     }
+
+    public function getTargetUncompletedAttribute()
+    {
+        return $this->where('target','>',0)->get();
+    }
+
+    public function getTargetCompletedAttribute()
+    {
+        return $this->where('target',0)->get();
+    }
 }

@@ -27,15 +27,15 @@ class CrowdfundController extends Controller
         }
     }
 
-    public function listTargetCompleted(Request $request)
+    public function listTargetCompleted(Request $request, Crowdfund $crowdfund)
     {
         try {
-            $crowdfund = Crowdfund::where('target',0)->get();
+            $crowdfundComplete = $crowdfund->TargetCompleted;
 
             return response()->json([
                 'success' => true,
                 'message' => 'Successfully fetch crowdfund list completed',
-                'data' => $crowdfund,
+                'data' => $crowdfundComplete,
             ]);
         } 
         catch (Exception $e) {
@@ -43,15 +43,15 @@ class CrowdfundController extends Controller
         }
     }
 
-    public function listTargetUncomplete(Request $request)
+    public function listTargetUncomplete(Request $request, Crowdfund $crowdfund)
     {
         try {
-            $crowdfund = Crowdfund::where('target','>',0)->get();
+            $crowdfundUncomplete = $crowdfund->TargetUncompleted;
 
             return response()->json([
                 'success' => true,
                 'message' => 'Successfully fetch crowdfund list uncompleted',
-                'data' => $crowdfund,
+                'data' => $crowdfundUncomplete,
             ]);
         } 
         catch (Exception $e) {
