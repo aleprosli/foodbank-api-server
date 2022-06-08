@@ -27,6 +27,9 @@ Route::prefix('v1')->middleware('auth:api')->group(function()
 
     Route::get('/foodbank/list', [FoodbankController::class,'list']);
 
-    Route::get('/crowdfund/list', [CrowdfundController::class,'list']);
+    Route::get('/crowdfund/list', [CrowdfundController::class,'listAll']);
+    Route::get('/crowdfund/list/target/completed', [CrowdfundController::class,'listTargetCompleted']);
+    Route::get('/crowdfund/list/target/uncompleted', [CrowdfundController::class,'listTargetUncomplete']);
     Route::post('/create/crowdfund', [CrowdfundController::class,'createCrowdfund']);
+    Route::post('/donor/pay/{crowdfund}', [CrowdfundController::class,'donorPayCrowdfund']);
 });
