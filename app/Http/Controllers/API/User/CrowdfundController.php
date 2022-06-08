@@ -8,6 +8,21 @@ use App\Http\Controllers\Controller;
 
 class CrowdfundController extends Controller
 {
+    public function list()
+    {
+        try {
+            $crowdfund = Crowdfund::all();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Successfully fetch crowdfund list',
+                'data' => $crowdfund,
+            ]);
+        } 
+        catch (Exception $e) {
+            return response()->error($e->getMessage(),true);
+        }
+    }
     public function createCrowdfund(Request $request)
     {
         try {
