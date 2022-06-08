@@ -17,6 +17,7 @@ return new class extends Migration
             $table->increments('id');
             $table->unsignedInteger('user_id')->nullable();
             $table->unsignedInteger('level_id')->nullable();
+            $table->integer('donation_count')->default(0);
             $table->string('image')->nullable();
             $table->timestamps();
 
