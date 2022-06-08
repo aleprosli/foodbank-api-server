@@ -17,4 +17,9 @@ class Crowdfund extends Model
         'target',
         'gps_location',
     ];
+
+    public function user()
+    {
+        return $this->hasOne(User::class);
+    }
 }

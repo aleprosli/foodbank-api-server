@@ -56,4 +56,9 @@ class User extends Authenticatable
     {
         return $this->hasOne(Client::class);
     }
+
+    public function crowdfunds()
+    {
+        return $this->hasMany(Crowdfunds::class);
+    }
 }
