@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\Auth\AuthController;
 use App\Http\Controllers\API\User\ProfileController;
 use App\Http\Controllers\API\User\FoodbankController;
+use App\Http\Controllers\API\User\CrowdfundController;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,4 +26,6 @@ Route::prefix('v1')->middleware('auth:api')->group(function()
     Route::post('/profile/update/{user}', [ProfileController::class,'update']);
 
     Route::get('/foodbank/list', [FoodbankController::class,'list']);
+
+    Route::post('/create/crowdfund', [CrowdfundController::class,'createCrowdfund']);
 });
