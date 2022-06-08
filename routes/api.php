@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\Auth\AuthController;
 use App\Http\Controllers\API\User\ProfileController;
+use App\Http\Controllers\API\User\FoodbankController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,4 +23,6 @@ Route::prefix('v1')->middleware('auth:api')->group(function()
 {
     Route::get('/profile/index', [ProfileController::class,'index']);
     Route::post('/profile/update/{user}', [ProfileController::class,'update']);
+
+    Route::get('/foodbank/list', [FoodbankController::class,'list']);
 });
