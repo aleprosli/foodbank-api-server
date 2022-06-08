@@ -15,11 +15,11 @@ use App\Http\Controllers\API\User\ProfileController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+Route::post('/register', [AuthController::class,'register']);
+Route::post('/login', [AuthController::class,'login']);
 
 Route::prefix('v1')->middleware('auth:api')->group(function()
 {
-    Route::post('/register', [AuthController::class,'register']);
-    Route::post('/login', [AuthController::class,'login']);
-
     Route::get('/profile/index', [ProfileController::class,'index']);
+    Route::post('/profile/update/{user}', [ProfileController::class,'update']);
 });
