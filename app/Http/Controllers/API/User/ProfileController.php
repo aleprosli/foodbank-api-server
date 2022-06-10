@@ -14,13 +14,21 @@ class ProfileController extends Controller
     public function index()
     {
         try {
-            $users = auth()->user();
-
+            $user = auth()->user();
+            
+            if($user->is_client == 1)
+            { 
+                $user_details = $user->client;
+            }
+            else
+            {
+                $user_details = $user->donor;
+            }
             //return to json
             return response()->json([
                 'success' => true,
-                'message' => 'Successfully fetch '.$users->name.' details',
-                'data' => $users,
+                'message' => 'Successfully fetch '.$user->name.' details',
+                'data' => $user
             ]);
         } 
         catch (Exception $e) {
@@ -45,19 +53,21 @@ class ProfileController extends Controller
                 if($user->is_client == 1)
                 { 
                     $user->client->image = $filename;
+                    $user->client->save();
                 }
                 else
                 {
                     $user->donor->image = $filename;
+                    $user->donor->save();
                 }
-
-                $user->save();
             }
+
             
             return response()->json([
                 'success' => true,
                 'message' => 'Successfully update '.$user->name.' details',
                 'data' => $user,
+                
             ]);
         } 
         catch (Exception $e) {
