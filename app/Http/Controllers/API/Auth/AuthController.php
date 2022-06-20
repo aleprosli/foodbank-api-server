@@ -33,8 +33,9 @@ class AuthController extends Controller
             {
                 //return response wrong credential
                 return response()->json([
-                    'success' => false,
-                    'message' => 'Please check your credentials'
+                    'success' => null,
+                    'message' => 'Please check your credentials',
+                    'token' => null,
                 ]);
             }
         } 
