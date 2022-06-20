@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\API\User;
 
+use File;
+use Storage;
+use App\Models\Donor;
 use App\Models\Crowdfund;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-use File;
-use Storage;
 
 class CrowdfundController extends Controller
 {
@@ -94,7 +95,9 @@ class CrowdfundController extends Controller
     public function donorPayCrowdfund(Request $request, Crowdfund $crowdfund)
     {
         try {
-            if(Auth::user()->is_donor == 1)
+
+            $user = Auth::user();
+            if($user->is_donor == 1)
             {
                 $donorPay = $request->priceDonate;
 
@@ -105,6 +108,11 @@ class CrowdfundController extends Controller
                     $crowdfund->update([
                         'target' => $newTargetPrice,
                     ]);
+                    
+                    $new_donation_count = $user->donor->update([
+                        'donation_count' => $user->donor->donation_count + (int)$donorPay
+                    ]);
+
                 }
                 else
                 {
@@ -133,4 +141,5 @@ class CrowdfundController extends Controller
             return response()->error($e->getMessage(),true);
         }
     }
+    
 }
