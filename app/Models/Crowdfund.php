@@ -16,6 +16,8 @@ class Crowdfund extends Model
         'category_id',
         'target',
         'gps_location',
+        'user_id',
+        'total_donation'
     ];
 
     public function user()
