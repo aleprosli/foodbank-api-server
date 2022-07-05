@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Donor;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Level extends Model
 {
@@ -12,4 +13,9 @@ class Level extends Model
     protected $fillable = [
         'total',
     ];
+
+    public function donor()
+    {
+        return $this->hasOne(Donor::class);
+    }
 }
