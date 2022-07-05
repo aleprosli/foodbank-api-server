@@ -127,6 +127,14 @@ class CrowdfundController extends Controller
                             ]);
                         }
                 }
+                else
+                {
+                    return response()->json([
+                        'success' => true,
+                        'message' => 'The donation has meet our target. Hence if you interest to make a donation, you can choose another crowdfund. Thankyou!',
+                        'data' => $crowdfund,
+                    ]);
+                }
                     
                 return response()->json([
                     'success' => true,
