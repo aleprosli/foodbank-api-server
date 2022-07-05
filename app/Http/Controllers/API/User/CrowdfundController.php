@@ -101,7 +101,7 @@ class CrowdfundController extends Controller
             
             if($user->is_donor == 1)
             {
-                if($crowdfund->target == $crowdfund->total_donation)
+                if($crowdfund->target != $crowdfund->total_donation)
                 {
                     $donorPay = $request->priceDonate;
 
@@ -115,6 +115,8 @@ class CrowdfundController extends Controller
                                 'total_donation' => $new_total_donation,
                             ]);
 
+                            $updateDonationWithLevel = $this->updateDonationCount($donorPay,$user);
+
                         }
                         else
                         {
@@ -126,7 +128,6 @@ class CrowdfundController extends Controller
                         }
                 }
                     
-                
                 return response()->json([
                     'success' => true,
                     'message' => 'Thank you for your donation '.Auth::user()->name,
@@ -144,6 +145,55 @@ class CrowdfundController extends Controller
         catch (Exception $e) {
             return response()->error($e->getMessage(),true);
         }
+    }
+
+    public function updateDonationCount($donorPay,$user)
+    {
+        $new_donation_count = $user->donor->update([
+            'donation_count' => $user->donor->donation_count + (int)$donorPay
+        ]);
+
+        $updateDonationWithLevel = $this->checkAndUpdateLevelByLatestDonationCount($user);
+
+        return $updateDonationWithLevel;
+    }
+
+    public function checkAndUpdateLevelByLatestDonationCount($user)
+    {
+        $donation_count = $user->donor->donation_count;
+
+        if($donation_count < 199)
+        {
+            $new_donation_count = $user->donor->update([
+                'level_id' => 1,
+            ]);
+        }
+        else if($donation_count < 299)
+        {
+            $new_donation_count = $user->donor->update([
+                'level_id' => 2,
+            ]);
+        }
+        else if($donation_count < 399)
+        {
+            $new_donation_count = $user->donor->update([
+                'level_id' => 3,
+            ]);
+        }
+        else if($donation_count < 499)
+        {
+            $new_donation_count = $user->donor->update([
+                'level_id' => 4,
+            ]);
+        }
+        else
+        {
+            $new_donation_count = $user->donor->update([
+                'level_id' => 5,
+            ]);
+        }
+
+        return $updateDonationWithLevel;
     }
     
 }
