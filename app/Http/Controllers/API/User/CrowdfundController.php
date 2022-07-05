@@ -64,6 +64,7 @@ class CrowdfundController extends Controller
     {
         try {
             $crowdfund = Crowdfund::create([
+                'user_id' => Auth::user()->id,
                 'title' => $request->title,
                 'description' => $request->description,
                 'category_id' => $request->category_id,
@@ -97,31 +98,34 @@ class CrowdfundController extends Controller
         try {
 
             $user = Auth::user();
+            
             if($user->is_donor == 1)
             {
-                $donorPay = $request->priceDonate;
-
-                $newTargetPrice = $crowdfund->target - $donorPay;
-    
-                if($newTargetPrice > -1)
+                if($crowdfund->target == $crowdfund->total_donation)
                 {
-                    $crowdfund->update([
-                        'target' => $newTargetPrice,
-                    ]);
+                    $donorPay = $request->priceDonate;
+
+                    $new_total_donation = $crowdfund->total_donation + (int)$donorPay;
+
+                    $exceed_target = $crowdfund->target - $crowdfund->total_donation;
+
+                        if($new_total_donation <= $crowdfund->target)
+                        {
+                            $crowdfund->update([
+                                'total_donation' => $new_total_donation,
+                            ]);
+
+                        }
+                        else
+                        {
+                            return response()->json([
+                                'success' => false,
+                                'message' => 'You donation exceed our target. Maximum donation amount we can accept is below RM '.$exceed_target,
+                                'data' => $crowdfund,
+                            ]);
+                        }
+                }
                     
-                    $new_donation_count = $user->donor->update([
-                        'donation_count' => $user->donor->donation_count + (int)$donorPay
-                    ]);
-
-                }
-                else
-                {
-                    return response()->json([
-                        'success' => false,
-                        'message' => 'You donation exceed our target. Maximum donation amount we can accept is RM '.$crowdfund->target,
-                        'data' => $crowdfund,
-                    ]);
-                }
                 
                 return response()->json([
                     'success' => true,
