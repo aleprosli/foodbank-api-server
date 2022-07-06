@@ -38,6 +38,13 @@ class CategorySeeder extends Seeder
                 'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
                 'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
             ],
+            [
+                'id' => 4,
+                'name' => 'Emergency Funds',
+                'image' => 'Tabung.jpeg',
+                'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+                'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
+            ],
             ]);
     }
 }
