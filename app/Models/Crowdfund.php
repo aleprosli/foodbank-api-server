@@ -27,11 +27,16 @@ class Crowdfund extends Model
 
     public function getTargetUncompletedAttribute()
     {
-        return $this->where('target','>',0)->get();
+        return $this->whereRaw('target > total_donation')->get();
     }
 
     public function getTargetCompletedAttribute()
     {
-        return $this->where('target',0)->get();
+        return $this->whereRaw('target = total_donation')->get();
+    }
+
+    public function getEmergencyFundAttribute()
+    {
+        return $this->where('category_id',4)->get();
     }
 }
