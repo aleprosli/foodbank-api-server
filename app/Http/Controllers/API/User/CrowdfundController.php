@@ -60,6 +60,22 @@ class CrowdfundController extends Controller
         }
     }
 
+    public function listEmergencyFund(Request $request, Crowdfund $crowdfund)
+    {
+        try {
+            $emergencyFund = $crowdfund->EmergencyFund;
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Successfully fetch emergency fund list',
+                'data' => $emergencyFund,
+            ]);
+        } 
+        catch (Exception $e) {
+            return response()->error($e->getMessage(),true);
+        }
+    }
+
     public function createCrowdfund(Request $request)
     {
         try {
