@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('api_token', 80)->unique()->nullable()->default(null);
             $table->boolean('is_client')->default(0);
             $table->boolean('is_donor')->default(0);
+            $table->boolean('is_admin')->default(0);
             $table->rememberToken();
             $table->timestamps();
         });
