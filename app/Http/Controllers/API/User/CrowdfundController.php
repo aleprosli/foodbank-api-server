@@ -101,7 +101,25 @@ class CrowdfundController extends Controller
             
             if($user->is_donor == 1)
             {
-                if($crowdfund->target != $crowdfund->total_donation)
+                if($crowdfund->target == NULL && $crowdfund->total_donation || $crowdfund->target == NULL && $crowdfund->total_donation == NULL)
+                {
+                    $donorPay = $request->priceDonate;
+
+                    $new_total_donation = $crowdfund->total_donation + (int)$donorPay;
+
+                    $crowdfund->update([
+                        'total_donation' => $new_total_donation,
+                    ]);
+
+                    $updateDonationWithLevel = $this->updateDonationCount($donorPay,$user);
+
+                    return response()->json([
+                        'success' => true,
+                        'message' => 'Thankyou for donation on Emergency Funds.',
+                        'data' => $crowdfund,
+                    ]);
+                }
+                else if($crowdfund->target != $crowdfund->total_donation)
                 {
                     $donorPay = $request->priceDonate;
 
@@ -109,23 +127,23 @@ class CrowdfundController extends Controller
 
                     $exceed_target = $crowdfund->target - $crowdfund->total_donation;
 
-                        if($new_total_donation <= $crowdfund->target)
-                        {
-                            $crowdfund->update([
-                                'total_donation' => $new_total_donation,
-                            ]);
+                    if($new_total_donation <= $crowdfund->target)
+                    {
+                        $crowdfund->update([
+                            'total_donation' => $new_total_donation,
+                        ]);
 
-                            $updateDonationWithLevel = $this->updateDonationCount($donorPay,$user);
-
-                        }
-                        else
-                        {
-                            return response()->json([
-                                'success' => false,
-                                'message' => 'You donation exceed our target. Maximum donation amount we can accept is below RM '.$exceed_target,
-                                'data' => $crowdfund,
-                            ]);
-                        }
+                        $updateDonationWithLevel = $this->updateDonationCount($donorPay,$user);
+                    
+                    }
+                    else
+                    {
+                        return response()->json([
+                            'success' => false,
+                            'message' => 'You donation exceed our target. Maximum donation amount we can accept is below RM '.$exceed_target,
+                            'data' => $crowdfund,
+                        ]);
+                    }
                 }
                 else
                 {
@@ -157,7 +175,7 @@ class CrowdfundController extends Controller
 
     public function updateDonationCount($donorPay,$user)
     {
-        $new_donation_count = $user->donor->update([
+        $crowdfund = $user->donor->update([
             'donation_count' => $user->donor->donation_count + (int)$donorPay
         ]);
 
@@ -201,7 +219,7 @@ class CrowdfundController extends Controller
             ]);
         }
 
-        return $updateDonationWithLevel;
+        return $donation_count;
     }
     
 }
