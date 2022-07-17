@@ -15,14 +15,14 @@ class CrowdfundController extends Controller
     public function listAll()
     {
         try {
-            $crowdfund = Crowdfund::all();
+            $crowdfund = Crowdfund::whereNotNull('target')->get();
 
             return response()->json([
                 'success' => true,
                 'message' => 'Successfully fetch crowdfund list',
                 'data' => $crowdfund,
             ]);
-        } 
+        }
         catch (Exception $e) {
             return response()->error($e->getMessage(),true);
         }
@@ -38,7 +38,7 @@ class CrowdfundController extends Controller
                 'message' => 'Successfully fetch crowdfund list completed',
                 'data' => $crowdfundComplete,
             ]);
-        } 
+        }
         catch (Exception $e) {
             return response()->error($e->getMessage(),true);
         }
@@ -54,7 +54,7 @@ class CrowdfundController extends Controller
                 'message' => 'Successfully fetch crowdfund list uncompleted',
                 'data' => $crowdfundUncomplete,
             ]);
-        } 
+        }
         catch (Exception $e) {
             return response()->error($e->getMessage(),true);
         }
@@ -70,7 +70,7 @@ class CrowdfundController extends Controller
                 'message' => 'Successfully fetch emergency fund list',
                 'data' => $emergencyFund,
             ]);
-        } 
+        }
         catch (Exception $e) {
             return response()->error($e->getMessage(),true);
         }
@@ -92,9 +92,9 @@ class CrowdfundController extends Controller
                 $filename = $crowdfund->title.'-'.date("d-m-Y").'.'.$request->image->getClientOriginalExtension();
 
                 Storage::disk('public')->put($filename, File::get($request->image));
- 
+
                 $crowdfund->image = $filename;
-    
+
                 $crowdfund->save();
             }
 
@@ -103,7 +103,7 @@ class CrowdfundController extends Controller
                 'message' => 'Crowdfund created with target RM'.$crowdfund->target,
                 'data' => $crowdfund,
             ]);
-        } 
+        }
         catch (Exception $e) {
             return response()->error($e->getMessage(),true);
         }
@@ -114,7 +114,7 @@ class CrowdfundController extends Controller
         try {
 
             $user = Auth::user();
-            
+
             if($user->is_donor == 1)
             {
                 if($crowdfund->target == NULL && $crowdfund->total_donation || $crowdfund->target == NULL && $crowdfund->total_donation == NULL)
@@ -150,7 +150,7 @@ class CrowdfundController extends Controller
                         ]);
 
                         $updateDonationWithLevel = $this->updateDonationCount($donorPay,$user);
-                    
+
                     }
                     else
                     {
@@ -169,7 +169,7 @@ class CrowdfundController extends Controller
                         'data' => $crowdfund,
                     ]);
                 }
-                    
+
                 return response()->json([
                     'success' => true,
                     'message' => 'Thank you for your donation '.Auth::user()->name,
@@ -183,7 +183,7 @@ class CrowdfundController extends Controller
                     'message' => 'Wrong identity. Only donor can donate this crowdfund',
                 ]);
             }
-        } 
+        }
         catch (Exception $e) {
             return response()->error($e->getMessage(),true);
         }
@@ -237,5 +237,5 @@ class CrowdfundController extends Controller
 
         return $donation_count;
     }
-    
+
 }
