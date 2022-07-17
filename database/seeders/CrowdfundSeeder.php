@@ -24,6 +24,7 @@ class CrowdfundSeeder extends Seeder
                 'image' => 'Duit.jpg',
                 'description' => 'For Emergency Funds',
                 'category_id' => 4,
+                'total_donation' => 0,
                 'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
                 'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
             ],
