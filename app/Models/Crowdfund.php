@@ -20,6 +20,10 @@ class Crowdfund extends Model
         'total_donation'
     ];
 
+    protected $attributes = [
+        'total_donation' => 0,
+    ];
+
     public function user()
     {
         return $this->hasOne(User::class);
@@ -37,6 +41,6 @@ class Crowdfund extends Model
 
     public function getEmergencyFundAttribute()
     {
-        return $this->where('category_id',4)->get();
+        return $this->where('category_id',4)->first();
     }
 }
