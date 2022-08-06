@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\Auth\AuthController;
+use App\Http\Controllers\API\User\PaymentController;
 use App\Http\Controllers\API\User\ProfileController;
 use App\Http\Controllers\API\User\FoodbankController;
 use App\Http\Controllers\API\User\CrowdfundController;
@@ -34,3 +35,5 @@ Route::prefix('v1')->middleware('auth:api')->group(function()
     Route::post('/create/crowdfund', [CrowdfundController::class,'createCrowdfund']);
     Route::post('/donor/pay/{crowdfund}', [CrowdfundController::class,'donorPayCrowdfund']);
 });
+
+Route::post('/create/bill/payment', [PaymentController::class,'createBill']);
